@@ -13,7 +13,7 @@ export const parse = text => {
       output = output.concat(currentPackage)
       currentPackage = {}
     } else if (line.startsWith(' ')) {
-      // Multiline values are transformed into fields
+      // Multiline values are transformed into arrays
       if (!Array.isArray(currentValue) && currentKey === 'Description') {
         currentValue = [currentValue]
       }
