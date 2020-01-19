@@ -29,8 +29,15 @@ export const parse = text => {
   currentPackage.id = generateId()
   output = output.concat(currentPackage)
 
-  output.forEach(pack => {
-    let deps = pack.Depends
+  output = populate(output, 'Depends')
+  output = populate(output, 'Pre-Depends')
+
+  return output
+}
+
+const populate = (packages, field) => {
+  packages.forEach(pack => {
+    let deps = pack[field]
     if (deps) {
       deps = deps.split(',')
       deps = deps.map(dep => {
@@ -41,7 +48,7 @@ export const parse = text => {
         return dep
       })
       deps = deps.map(dep => {
-        const depObject = output.find(packToFind => packToFind.Package === dep)
+        const depObject = packages.find(packToFind => packToFind.Package === dep)
         if (depObject) {
           return {
             id: depObject.id,
@@ -50,8 +57,8 @@ export const parse = text => {
         }
         return { name: dep }
       })
-      pack.Depends = deps
+      pack[field] = deps
     }
   })
-  return output
+  return packages
 }
