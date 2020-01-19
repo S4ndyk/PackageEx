@@ -21,7 +21,7 @@ const App = () => {
   return (
     <div className='container'>
       <Router>
-        <Route path='/index' render={() => <IndexView packages={packages} /> } />
+        <Route path='/index' render={() => <IndexView packages={packages} setPackages={setPackages} /> } />
         <Route path='/upload' render={() => <UploadView setPackages={setPackages} />} />
         <Route exact path='/' render={() => <Redirect to='/index' />} />
         <Route path='/packages/:id' render={({ match }) => <Package packageInfo={findById(match.params.id)}/>} />

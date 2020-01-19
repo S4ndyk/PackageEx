@@ -29,8 +29,8 @@ export const parse = text => {
   currentPackage.id = generateId()
   output = output.concat(currentPackage)
 
-  output = populate(output, 'Depends')
-  output = populate(output, 'Pre-Depends')
+  populate(output, 'Depends')
+  populate(output, 'Pre-Depends')
 
   return output
 }
@@ -39,26 +39,34 @@ const populate = (packages, field) => {
   packages.forEach(pack => {
     let deps = pack[field]
     if (deps) {
-      deps = deps.split(',')
-      deps = deps.map(dep => {
-        if (dep.indexOf('(') !== -1) {
-          dep = dep.substring(0, dep.indexOf('('))
-        }
-        dep = dep.trim()
-        return dep
-      })
-      deps = deps.map(dep => {
-        const depObject = packages.find(packToFind => packToFind.Package === dep)
-        if (depObject) {
-          return {
-            id: depObject.id,
-            name: depObject.Package
-          }
-        }
-        return { name: dep }
-      })
+      deps = removeVersionInformation(deps)
+      deps = Array.from(new Set(deps))
+      deps = mapToObject(deps, packages)
       pack[field] = deps
     }
   })
-  return packages
+}
+
+const removeVersionInformation = deps => {
+  deps = deps.split(',')
+  return deps.map(dep => {
+    if (dep.indexOf('(') !== -1) {
+      dep = dep.substring(0, dep.indexOf('('))
+    }
+    dep = dep.trim()
+    return dep
+  })
+}
+
+const mapToObject = (deps, packages) => {
+  return deps.map(dep => {
+    const depObject = packages.find(packToFind => packToFind.Package === dep)
+    if (depObject) {
+      return {
+        id: depObject.id,
+        name: depObject.Package
+      }
+    }
+    return { name: dep }
+  })
 }

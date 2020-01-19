@@ -5,6 +5,9 @@ const Package = ({ packageInfo }) => {
   if (packageInfo === undefined) {
     return null
   }
+  if (packageInfo.Package === 'python') {
+    console.log(packageInfo)
+  }
   return (
     <div>
       <h2>{packageInfo.Package}</h2>
