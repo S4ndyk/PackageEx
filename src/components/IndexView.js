@@ -1,19 +1,13 @@
 import React from 'react'
-import { Redirect, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
-import UploadView from './UploadView'
-import { parse } from '../parser'
+import { parse } from '../simple-parser'
 
 const IndexView = (props) => {
   const packages = props.packages
   if (packages === undefined) {
-    return (
-      <div>
-        It seems you havent uploaded your config file yet!
-        <UploadView />
-      </div>
-    )
+    return null
   }
 
   const upload = async event => {
@@ -24,22 +18,23 @@ const IndexView = (props) => {
     window.localStorage.setItem('packages', JSON.stringify(parsed))
   }
 
+  const mapToList = packages.map(pkg =>
+    <ListGroup.Item key={pkg.id}>
+      <Link to={`/packages/${pkg.id}`} >
+        {pkg.package}
+      </Link>
+    </ListGroup.Item>)
+
   return (
     <div>
+      <h2>Click upload and navigate to /var/lib/dpkg/status</h2>
       <input id='input' type='file' onChange={upload} style={{ display: 'none' }} />
       <Button className='upload' >
         <label htmlFor='input' >upload</label>
       </Button>
       <ListGroup>
-        {packages.map(p => {
-          return (
-            <ListGroup.Item key={p.id}>
-              <Link key={p.id} to={`/packages/${p.id}`}>{p.Package}</Link>
-            </ListGroup.Item>
-          )
-        })}
+        {mapToList}
       </ListGroup>
-
     </div>
   )
 }

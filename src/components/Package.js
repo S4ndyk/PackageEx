@@ -1,38 +1,30 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Package = ({ packageInfo }) => {
-  if (packageInfo === undefined) {
+const Package = ({ pkg, packages }) => {
+  if (pkg === undefined || packages === undefined) {
     return null
   }
-  if (packageInfo.Package === 'python') {
-    console.log(packageInfo)
-  }
-  return (
-    <div>
-      <h2>{packageInfo.Package}</h2>
-      <Link to='/index' >back to menu</Link>
-      <div>{packageInfo.Description.map((line, index) => <div key={index}>{line}</div>)}</div>
-      {packageInfo.Depends ? <Dependencies depends={packageInfo.Depends} /> : null}
-      {packageInfo['Pre-Depends'] ? <PreDependencies preDepends={packageInfo['Pre-Depends']} /> : null}
-    </div>
-  )
-}
 
-const Dependencies = (props) => {
-  return (
-    <div>
-      Depends:
-      {props.depends.map(dep => <Link key={dep.id} to={dep.id}>{dep.name} </Link>)}
-    </div>
-  )
-}
+  const findByName = (name) => packages.find(p => p.package === name)
+  const namesToList = names => names.map(name => findByName(name))
+  const depends = () => namesToList(pkg.depends)
+  const reverse = () => namesToList(pkg.reversedepends)
+  const ListToElements = p => p ? <Link key={p.id} to={`/packages/${p.id}`}>{p.package}</Link> : null
 
-const PreDependencies = (props) => {
   return (
     <div>
-      Pre-Depends:
-      {props.preDepends.map(dep => <Link key={dep.id} to={dep.id}>{dep.name} </Link>)}
+      <h2>{pkg.package}</h2>
+      {pkg.description.map((line, index) => <div key={index}>{line}</div>)}
+      <div>
+        Dependencies:
+        { pkg.depends ? depends().map(ListToElements) : null }
+
+      </div>
+      <div>
+        Reverse dependecies:
+        { pkg.reversedepends ? reverse().map(ListToElements) : null }
+      </div>
     </div>
   )
 }
