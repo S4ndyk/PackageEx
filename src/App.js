@@ -5,7 +5,6 @@ import Package from './components/Package'
 
 const App = () => {
   const [packages, setPackages] = useState([])
-  console.log(packages)
 
   useEffect(() => {
     const storagedPackages = window.localStorage.getItem('packages')

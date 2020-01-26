@@ -10,21 +10,20 @@ const Package = ({ pkg, packages }) => {
   const namesToList = names => names.map(name => findByName(name))
   const depends = () => namesToList(pkg.depends)
   const reverse = () => namesToList(pkg.reversedepends)
-  const ListToElements = p => p ? <Link key={p.id} to={`/packages/${p.id}`}>{p.package}</Link> : null
+  const ListToElements = p => p ? <Link key={p.id} to={`/packages/${p.id}`}>{p.package} </Link> : null
 
   return (
     <div>
       <h2>{pkg.package}</h2>
+      <Link to='/index'>back to main menu</Link>
       {pkg.description.map((line, index) => <div key={index}>{line}</div>)}
       <div>
-        Dependencies:
-        { pkg.depends ? depends().map(ListToElements) : null }
-
+        Dependencies: { pkg.depends ? depends().map(ListToElements) : null }
       </div>
       <div>
-        Reverse dependecies:
-        { pkg.reversedepends ? reverse().map(ListToElements) : null }
+        Reverse dependecies: { pkg.reversedepends ? reverse().map(ListToElements) : null }
       </div>
+      <div>maintained by: {pkg.maintainer}</div>
     </div>
   )
 }

@@ -18,12 +18,15 @@ const IndexView = (props) => {
     window.localStorage.setItem('packages', JSON.stringify(parsed))
   }
 
-  const mapToList = packages.map(pkg =>
-    <ListGroup.Item key={pkg.id}>
-      <Link to={`/packages/${pkg.id}`} >
-        {pkg.package}
-      </Link>
-    </ListGroup.Item>)
+  const sortAndMap = packages
+    .sort((a, b) => a.package.localeCompare(b.package))
+    .map(pkg =>
+      <ListGroup.Item key={pkg.id}>
+        <Link to={`/packages/${pkg.id}`} >
+          {pkg.package}
+        </Link>
+      </ListGroup.Item>
+    )
 
   return (
     <div>
@@ -33,7 +36,7 @@ const IndexView = (props) => {
         <label htmlFor='input' >upload</label>
       </Button>
       <ListGroup>
-        {mapToList}
+        {sortAndMap}
       </ListGroup>
     </div>
   )
