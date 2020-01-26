@@ -37,7 +37,7 @@ const addReverseDep = (pkgName, depName, data) => {
   }
 }
 
-// Returns the extracted package and length of lines read
+// Returns the extracted package and position of last line read
 const extractPackage = (data, packageIndex) => {
   const pkg = { id: getId() }
   let i = packageIndex
@@ -49,6 +49,7 @@ const extractPackage = (data, packageIndex) => {
   return [pkg, i - 1]
 }
 
+// Return key-value pair and positon of last line read
 const extractField = (data, fieldIndex) => {
   const line = data[fieldIndex]
   const separatorIndex = line.indexOf(SEPARATOR)
